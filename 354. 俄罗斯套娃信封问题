@@ -1,0 +1,27 @@
+class Solution {
+public:
+    static bool cmp(vector<int>& a, vector<int>& b){
+        if(a[0] == b[0]) return a[1] > b[1];
+        else return a[0] < b[0];
+    }
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        sort(envelopes.begin(), envelopes.end(), cmp);
+        vector<int> nums, q;
+        for(auto item : envelopes) nums.push_back(item[1]);
+        int n = nums.size();
+        for(int i = 0; i < n; i ++){
+            int y = nums[i];
+            if(q.empty() || y > q.back()) q.push_back(y);
+            else{
+                int l = 0, r = q.size() - 1;
+                while(l < r){
+                    int mid = l + r >> 1;
+                    if(q[mid] >= y) r = mid;
+                    else l = mid + 1;
+                }
+                q[l] = min(q[l], y);
+            }
+        }
+        return q.size();
+    }
+};
